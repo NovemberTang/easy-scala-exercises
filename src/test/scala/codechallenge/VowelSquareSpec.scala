@@ -13,8 +13,4 @@ class VowelSquareSpec extends AnyFlatSpec with Matchers {
     findTheVowelSquare(input) shouldEqual (1,2)
   }
 
-  "check" should "work" in {
-    VowelSquare.checkForConsecutiveMatches(List(false, false, false, true, false), true)
-  }
-
 }

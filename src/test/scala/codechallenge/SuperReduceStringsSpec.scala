@@ -1,0 +1,5 @@
+package codechallenge
+
+class SuperReduceStringsSpec {
+
+}
