@@ -7,11 +7,11 @@ object VowelSquare {
   def findTheVowelSquare(characterMatrix: List[String]): (Int, Int) = {
 
     val booleanMatrix: List[List[Boolean]] = characterMatrix.map(stringToBoolList)
-    val truePairIndices: List[Int] = booleanMatrix.map(checkForConsecutiveMatches(_, true))
-    val xIndices = truePairIndices.distinct.filterNot(_ == -1)
+    val vowelIndicesOfEachRow: List[Int] = booleanMatrix.map(checkForConsecutiveMatches(_, true))
+    val xIndices = vowelIndicesOfEachRow.distinct.filterNot(_ == -1)
 
     val squareCoordinates: List[(Int, Int)] = xIndices.map{
-      x => val y: Int = checkForConsecutiveMatches(truePairIndices, x)
+      x => val y: Int = checkForConsecutiveMatches(vowelIndicesOfEachRow, x)
         (x + 1, y + 1)
     }
 
