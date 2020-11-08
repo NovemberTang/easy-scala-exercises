@@ -4,7 +4,7 @@ import WorkingWithLists._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class WorkingWithListsSpec extends AnyFlatSpec with Matchers{
+class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
 
   private val exampleList = List(1, 1, 2, 3, 5, 8)
   "last" should "return the last element of that list" in {
@@ -38,6 +38,21 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers{
 
   "length" should "calculate the length of a list" in {
     WorkingWithLists.length(exampleList) shouldEqual 6
+  }
+
+  "reverse" should "create a list with the original elements in reverse order" in {
+
+    reverse(exampleList) shouldEqual List(8, 5, 3, 2, 1, 1)
+
+  }
+
+  "isPalindrome" should " return true for a list that is identical in reverse" in {
+
+    isPalindrome(List(1,2,3,2,1)) shouldEqual true
+
+  }
+  it should "return false for a list that is not the same forwards and backwards" in {
+    isPalindrome(exampleList) shouldEqual false
   }
 
 }

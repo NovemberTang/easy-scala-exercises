@@ -30,10 +30,9 @@ object WorkingWithLists {
   def penultimate(list: List[Int]): Int = {
 
 
-
     list match {
       case Nil => inputTooShort(2)
-      case x ::Nil =>  inputTooShort(2)
+      case x :: Nil => inputTooShort(2)
       case x :: y :: Nil => x
       case x :: y :: xs => penultimate(list.tail)
     }
@@ -53,12 +52,32 @@ object WorkingWithLists {
     listRecurse(0, n, list)
   }
 
+  //p04 find the length of a list
   def length(list: List[Int]): Int = {
 
     @tailrec
-    def listRecurse(acc:Int, list: List[Int]): Int = if (list.isEmpty) acc else listRecurse(acc + 1, list.tail)
+    def listRecurse(acc: Int, list: List[Int]): Int = if (list.isEmpty) acc else listRecurse(acc + 1, list.tail)
 
     listRecurse(0, list)
   }
 
+  //p05 reverse a list
+  def reverse(list: List[Int]): List[Int] = {
+
+    @tailrec
+    def reverseRecurse(inputList: List[Int], outputList: List[Int]): List[Int] = {
+      inputList match {
+        case List() => outputList
+        case _ => reverseRecurse(inputList.init, outputList ++ List(inputList.last))
+      }
+    }
+
+    reverseRecurse(list, List.empty)
+
+  }
+
+  //p06 is a list a palindrome
+  def isPalindrome(list: List[Int]): Boolean = {
+    list == reverse(list)
+  }
 }
