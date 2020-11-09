@@ -80,4 +80,18 @@ object WorkingWithLists {
   def isPalindrome(list: List[Int]): Boolean = {
     list == reverse(list)
   }
+
+  //p07 flatten nested lists
+  def flatten(list: List[Any]): List[Int] = ???
+
+
+  //p08 eliminate consecutive duplicates
+  def compress(string: List[Any]): List[Any] = {
+    def removeDuplicates(acc: List[Any], c: Any): List[Any] = if (acc.nonEmpty && acc.last == c) acc else acc ++ List(c)
+    val x: Any = ""
+
+    string.foldLeft(List(x))(removeDuplicates).tail
+  }
+
+
 }
