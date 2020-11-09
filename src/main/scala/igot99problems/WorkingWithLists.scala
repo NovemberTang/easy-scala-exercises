@@ -72,11 +72,30 @@ object WorkingWithLists {
 
 
   //p08 eliminate consecutive duplicates
-  def compress(string: List[Any]): List[Any] = {
-    def removeDuplicates(acc: List[Any], c: Any): List[Any] = if (acc.nonEmpty && acc.last == c) acc else acc ++ List(c)
-    val x: Any = ""
+  def compress[A](list: List[A]): List[A] = {
+    list match {
+      case List() => List()
+      case x :: xs => List(x) ++ compress(xs.dropWhile(_ == x))
+    }
+  }
 
-    string.foldLeft(List(x))(removeDuplicates).tail
+  //p14 duplicate elements of a list
+  def duplicate[A](list: List[A]): List[A] = {
+
+    def duplicateRecurse(input: List[A], output: List[A]): List[A] = {
+      input match {
+        case Nil => output
+        case x :: xs => duplicateRecurse(input.tail, output ++ List(x,x))
+      }
+    }
+    duplicateRecurse(list, List.empty)
+
+    //val duplicateList = list
+    //list.zip(duplicateList).flatMap(tup => List(tup._1, tup._2))
+  }
+
+  def duplicateN[A](n:Int, list: List[A]): List[A] = {
+    ???
   }
 
   private def inputTooShort(minListLength: Int) = {
