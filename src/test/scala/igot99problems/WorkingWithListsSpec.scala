@@ -67,4 +67,12 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
     duplicate(exampleList) shouldEqual List(1,1,1,1,2,2,3,3,5,5,8,8)
   }
 
+  "duplicateN" should "duplicate each element n times" in {
+    duplicateN(1, exampleList) shouldEqual exampleList
+    duplicateN(3, exampleList) shouldEqual List(1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 5, 5, 5, 8, 8, 8)
+  }
+
+  "drop" should "drop every nth element from a list" in {
+    drop(3, List(1,2,3,4,5,6,7,8,9)) shouldEqual List(1,2,4,5,7,8)
+  }
 }

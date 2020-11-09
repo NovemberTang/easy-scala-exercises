@@ -82,20 +82,55 @@ object WorkingWithLists {
   //p14 duplicate elements of a list
   def duplicate[A](list: List[A]): List[A] = {
 
-    def duplicateRecurse(input: List[A], output: List[A]): List[A] = {
+    @tailrec
+    def duplicateRecurse(input: List[A], output: List[A] = List.empty): List[A] = {
       input match {
         case Nil => output
-        case x :: xs => duplicateRecurse(input.tail, output ++ List(x,x))
+        case x :: xs => duplicateRecurse(input.tail, output ++ List(x, x))
       }
     }
-    duplicateRecurse(list, List.empty)
+
+    duplicateRecurse(list)
 
     //val duplicateList = list
     //list.zip(duplicateList).flatMap(tup => List(tup._1, tup._2))
   }
 
-  def duplicateN[A](n:Int, list: List[A]): List[A] = {
-    ???
+  //p15 duplicate list elements a given number of times
+  def duplicateN[A](n: Int, list: List[A]): List[A] = {
+    def createDuplicatesOfELement(elem: A, n: Int = n, input: List[A] = List.empty): List[A] = {
+      n match {
+        case 0 => input
+        case _ => elem :: createDuplicatesOfELement(elem, n - 1, input)
+      }
+    }
+
+    n match {
+      case 0 => inputTooShort(1)
+      case 1 => list
+      case _ => list.flatMap(createDuplicatesOfELement(_))
+    }
+  }
+
+  //p16 drop every nth element from a list
+  def drop[A](n: Int, list: List[A]): List[A] = {
+    @tailrec
+    def dropRec(acc: Int,
+                input: List[A] = list,
+                outputOfLastCall: List[A] = List.empty,
+                n: Int = n): List[A] = {
+
+      val indexIsMultipleOfN: Boolean = acc%n == 0
+
+      input match {
+        case Nil => outputOfLastCall
+        case _ =>
+          if (indexIsMultipleOfN) dropRec(acc + 1, input.tail, outputOfLastCall)
+          else dropRec(acc + 1, input.tail, outputOfLastCall ++ List(input.head))
+      }
+    }
+
+    dropRec(1)
   }
 
   private def inputTooShort(minListLength: Int) = {
