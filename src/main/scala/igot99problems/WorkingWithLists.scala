@@ -5,17 +5,9 @@ import scala.annotation.tailrec
 //http://aperiodic.net/phil/scala/s-99/
 object WorkingWithLists {
 
-  def inputTooShort(minListLength: Int) = {
-    minListLength match {
-      case 1 => throw new IllegalArgumentException(s"List must contain at least 1 element")
-      case _ => throw new IllegalArgumentException(s"List must contain at least $minListLength elements")
-    }
-    throw new IllegalArgumentException(s"List must contain at least $minListLength elements")
-  }
-
   //p01 Find the last element of a list
   @tailrec
-  def last(list: List[Int]): Int = {
+  def last[A](list: List[A]): A = {
 
     list match {
       case Nil => inputTooShort(1)
@@ -27,7 +19,7 @@ object WorkingWithLists {
 
   //p02 find the penultimate element of a list
   @tailrec
-  def penultimate(list: List[Int]): Int = {
+  def penultimate[A](list: List[A]): A = {
 
 
     list match {
@@ -40,11 +32,11 @@ object WorkingWithLists {
   }
 
   //p03 find the kth element of a list
-  def nth(n: Int, list: List[Int]): Int = {
+  def nth[A](n: Int, list: List[A]): A = {
     require(length(list) >= n, "List must contain at least as many elements as the argument")
 
     @tailrec
-    def listRecurse(acc: Int, n: Int, list: List[Int]): Int = {
+    def listRecurse(acc: Int, n: Int, list: List[A]): A = {
       if (acc < n) listRecurse(acc + 1, n, list.tail)
       else list.head
     }
@@ -53,19 +45,19 @@ object WorkingWithLists {
   }
 
   //p04 find the length of a list
-  def length(list: List[Int]): Int = {
+  def length[A](list: List[A]): Int = {
 
     @tailrec
-    def listRecurse(acc: Int, list: List[Int]): Int = if (list.isEmpty) acc else listRecurse(acc + 1, list.tail)
+    def listRecurse(acc: Int, list: List[A]): Int = if (list.isEmpty) acc else listRecurse(acc + 1, list.tail)
 
     listRecurse(0, list)
   }
 
   //p05 reverse a list
-  def reverse(list: List[Int]): List[Int] = {
+  def reverse[A](list: List[A]): List[A] = {
 
     @tailrec
-    def reverseRecurse(inputList: List[Int], outputList: List[Int]): List[Int] = {
+    def reverseRecurse(inputList: List[A], outputList: List[A]): List[A] = {
       inputList match {
         case List() => outputList
         case _ => reverseRecurse(inputList.init, outputList ++ List(inputList.last))
@@ -77,7 +69,7 @@ object WorkingWithLists {
   }
 
   //p06 is a list a palindrome
-  def isPalindrome(list: List[Int]): Boolean = {
+  def isPalindrome[A](list: List[A]): Boolean = {
     list == reverse(list)
   }
 
@@ -93,5 +85,12 @@ object WorkingWithLists {
     string.foldLeft(List(x))(removeDuplicates).tail
   }
 
+  private def inputTooShort(minListLength: Int) = {
+    minListLength match {
+      case 1 => throw new IllegalArgumentException(s"List must contain at least 1 element")
+      case _ => throw new IllegalArgumentException(s"List must contain at least $minListLength elements")
+    }
+    throw new IllegalArgumentException(s"List must contain at least $minListLength elements")
+  }
 
 }
