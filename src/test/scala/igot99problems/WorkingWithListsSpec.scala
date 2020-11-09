@@ -75,4 +75,10 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
   "drop" should "drop every nth element from a list" in {
     drop(3, List(1,2,3,4,5,6,7,8,9)) shouldEqual List(1,2,4,5,7,8)
   }
+
+  "split" should "split a list at the appropriate index" in {
+    val actual = split(3, List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
+    val expected = (List('a, 'b, 'c), List('d, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
+    actual shouldEqual expected
+  }
 }

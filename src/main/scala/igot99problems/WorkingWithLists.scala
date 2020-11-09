@@ -19,7 +19,6 @@ object WorkingWithLists {
   @tailrec
   def penultimate[A](list: List[A]): A = {
 
-
     list match {
       case Nil => inputTooShort(2)
       case x :: Nil => inputTooShort(2)
@@ -131,6 +130,25 @@ object WorkingWithLists {
     }
 
     dropRec(1)
+  }
+
+  //p17 split a list into two parts
+  def split[A](index: Int, list: List[A]): (List[A], List[A]) = {
+
+    @tailrec
+    def recSplit(originalList:List[A],
+                 newList: List[A] = List.empty,
+                 acc: Int = 0,
+                 index: Int = index): (List[A], List[A]) = {
+      val reachedFinalIndex: Boolean = acc == index
+      if (reachedFinalIndex) (newList, originalList)
+      else recSplit(originalList.tail, newList ++ List(originalList.head), acc + 1)
+    }
+
+    val splitIndexIsTooLarge = length(list) >= index
+    if (splitIndexIsTooLarge) throw new IllegalArgumentException("You cannot split at an index larger than the list")
+    else recSplit(list)
+
   }
 
   private def inputTooShort(minListLength: Int) = {
