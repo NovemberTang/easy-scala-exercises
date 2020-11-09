@@ -8,13 +8,11 @@ object WorkingWithLists {
   //p01 Find the last element of a list
   @tailrec
   def last[A](list: List[A]): A = {
-
     list match {
       case Nil => inputTooShort(1)
       case x :: Nil => x
       case x :: xs => last(list.tail)
     }
-
   }
 
   //p02 find the penultimate element of a list
@@ -46,7 +44,6 @@ object WorkingWithLists {
 
   //p04 find the length of a list
   def length[A](list: List[A]): Int = {
-
     @tailrec
     def listRecurse(acc: Int, list: List[A]): Int = if (list.isEmpty) acc else listRecurse(acc + 1, list.tail)
 
@@ -55,7 +52,6 @@ object WorkingWithLists {
 
   //p05 reverse a list
   def reverse[A](list: List[A]): List[A] = {
-
     @tailrec
     def reverseRecurse(inputList: List[A], outputList: List[A]): List[A] = {
       inputList match {
@@ -65,13 +61,11 @@ object WorkingWithLists {
     }
 
     reverseRecurse(list, List.empty)
-
   }
 
   //p06 is a list a palindrome
-  def isPalindrome[A](list: List[A]): Boolean = {
-    list == reverse(list)
-  }
+  def isPalindrome[A](list: List[A]): Boolean = list == reverse(list)
+
 
   //p07 flatten nested lists
   def flatten(list: List[Any]): List[Int] = ???
