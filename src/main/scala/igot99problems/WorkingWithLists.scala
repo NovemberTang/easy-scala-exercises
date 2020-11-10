@@ -141,6 +141,7 @@ object WorkingWithLists {
                  acc: Int = 0,
                  index: Int = index): (List[A], List[A]) = {
       val reachedFinalIndex: Boolean = acc == index
+
       if (reachedFinalIndex) (newList, originalList)
       else recSplit(originalList.tail, newList ++ List(originalList.head), acc + 1)
     }
