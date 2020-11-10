@@ -95,4 +95,15 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
   it should " throw an exception if out of bounds" in {
     intercept[IndexOutOfBoundsException](removeAt(4, List('a, 'b, 'c, 'd)))
   }
+
+  "insertAt" should "correctly place a new element into a list" in {
+    insertAt('new, 1, List('a, 'b, 'c, 'd)) shouldEqual List('a, 'new, 'b, 'c, 'd)
+  }
+
+  "range" should "create a list of ints from start to end" in {
+    range(4, 9) shouldEqual List(4, 5, 6, 7, 8, 9)
+  }
+  it should "throw an exception if given invalid arguments" in {
+    intercept[IllegalArgumentException](range(3,0))
+  }
 }

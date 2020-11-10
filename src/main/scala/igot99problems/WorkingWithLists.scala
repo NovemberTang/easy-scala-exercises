@@ -171,7 +171,7 @@ object WorkingWithLists {
     throwIfIndexTooLarge(n, list)
 
     val (split1, end) = split(n, list)
-    val (loneElement, split2) = split(1, `end`)
+    val (loneElement, split2) = split(1, end)
     (split1++split2, loneElement.head)
   }
 
@@ -183,10 +183,27 @@ object WorkingWithLists {
     throw new IllegalArgumentException(s"List must contain at least $minListLength elements")
   }
 
+  //p21 insert element at a given position into a list
+  def insertAt[A](elem: A, n: Int, list: List[A]): List[A] = {
+    throwIfIndexTooLarge(n, list)
+    val (a,b) = split(n,list)
+    a ++ List(elem) ++ b
+  }
 
+  //p22 create a list containing all integers in a given range
+  def range(start: Int, end: Int): List[Int] = {
+    require(start < end, "Range must be ascending")
+    @tailrec
+    def rangeRec(currentElem: Int, start: Int, list: List[Int]): List[Int] = {
+      val finalElement: Boolean = currentElem == start
+      if (finalElement) start :: list else rangeRec(currentElem - 1, start, currentElem :: list)
+    }
+
+    rangeRec(end, start, List())
+  }
   private def throwIfIndexTooLarge[A](index: Int, list: List[A]): Unit = {
-    val splitIndexIsTooLarge = index > length(list)
-    if (splitIndexIsTooLarge) throw new IndexOutOfBoundsException("You cannot split at an index larger than the list")
+    val indexIsTooLarge = index > length(list)
+    if (indexIsTooLarge) throw new IndexOutOfBoundsException("Index cannot be larger than the length of the list")
   }
 
 }
