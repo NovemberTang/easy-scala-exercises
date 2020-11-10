@@ -1,6 +1,7 @@
 package igot99problems
 
 import scala.annotation.tailrec
+import scala.math.Ordering.Implicits.seqOrdering
 import scala.util.Random
 
 //http://aperiodic.net/phil/scala/s-99/
@@ -62,10 +63,8 @@ object WorkingWithLists {
   //p14 duplicate elements of a list
   @tailrec
   def duplicate[A](input: List[A], output: List[A] = List.empty): List[A] = {
-    input match {
-      case Nil => output
-      case x :: xs => duplicate(input.tail, output ++ List(x, x))
-    }
+    if (input.isEmpty) output
+    else duplicate(input.tail, output ++ List(input.head, input.head))
   }
 
   //p15 duplicate list elements a given number of times
@@ -161,22 +160,13 @@ object WorkingWithLists {
 
   //p23 Extract a given number of randomly selected elements from a list.
   @tailrec
-  def randomSelect[A](n: Int, inlist: List[A], outlist: List[A] = List.empty): List[A] = {
-
-    def addElementToRandomList(inlist: List[A], outlist: List[A]) = {
-      val rand = Random
-      val listLength: Int = length(inlist)
-      val randomIndex = rand.nextInt(listLength)
-      val randomListElem = nth(randomIndex, inlist)
-      randomListElem :: outlist
-    }
-
-    val updatedRandomList = addElementToRandomList(inlist, outlist)
+  def randomSelect[A](n: Int, inputList: List[A], outputList: List[A] = List.empty): List[A] = {
+    val updatedRandomList = addRandomToOutputList(inputList, outputList)._1
 
     n match {
-      case 0 => outlist
+      case 0 => outputList
       case _ =>
-        randomSelect(n - 1, inlist, updatedRandomList)
+        randomSelect(n - 1, inputList, updatedRandomList)
     }
   }
 
@@ -185,6 +175,48 @@ object WorkingWithLists {
 
     val newRange = range(1, rangeMax)
     randomSelect(numberOfElements, newRange)
+  }
+
+  //p25 create a random permutation of the elements of a list
+  @tailrec
+  def randomPermute[A](inputList: List[A], outputList: List[A] = List.empty): List[A] = {
+    if (inputList.isEmpty) outputList
+    else {
+      val (output, randomIndex) = addRandomToOutputList(inputList, outputList)
+      val input = removeAt(randomIndex, inputList)._1
+      randomPermute(input, output)
+    }
+  }
+
+  //p26 generate combinations of n distinct objects from a list
+  //TODO generalise this function
+  def combinations(n: Int, list: List[Int]): List[List[Int]] = {
+    throwIfListTooShort(n, list)
+
+    val output: List[List[Int]] = for (i <- list;
+                                       j <- list if i != j;
+                                       k <- list if i != k && j != k)
+      yield List(i, j, k).sorted
+
+    output.sorted.distinct
+
+  }
+
+  //p27
+
+  //p28 sort list of lists by sublist length
+  def lsort[A](list: List[List[A]]): List[List[A]] = {
+    val lengthList = list.map(sublist => length(sublist))
+    val sortedZipList: List[(Int, List[A])] = lengthList.zip(list).sortBy(_._1)
+    sortedZipList.map(_._2)
+  }
+
+  private def addRandomToOutputList[A](inputList: List[A], outputList: List[A]): (List[A], Int) = {
+    val rand = Random
+    val listLength: Int = length(inputList)
+    val randomIndex = rand.nextInt(listLength)
+    val randomListElem = nth(randomIndex, inputList)
+    (randomListElem :: outputList, randomIndex)
   }
 
   private def throwIfListTooShort[A](minListLength: Int, list: List[A]): Unit = {

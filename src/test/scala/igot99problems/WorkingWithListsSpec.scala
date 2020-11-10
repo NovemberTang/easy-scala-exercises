@@ -107,4 +107,21 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
   "lotto" should "draw n different elements from a range" in {
     lotto(6, 49) should have length(6)
   }
+
+  "randomPermute" should "return all list elements in a random order" in {
+    val input = List('a, 'b, 'c, 'd, 'e, 'f)
+    val output = randomPermute(input)
+    output should contain theSameElementsAs input
+  }
+
+  "combinations" should "return the list of all possible combinations of the elements" in {
+    val actualOutput = combinations(3, List(1,2,3,4,5,6,7,8,9,10,11,12))
+    actualOutput.length shouldEqual(220)
+  }
+
+  "lsort" should "sort a list of lists by length of sublist" in {
+    val input = List(List('a, 'b, 'c), List('d, 'e), List('f, 'g, 'h), List('d, 'e), List('i, 'j, 'k, 'l), List('m, 'n), List('o))
+    val output = List(List('o), List('d, 'e), List('d, 'e), List('m, 'n), List('a, 'b, 'c), List('f, 'g, 'h), List('i, 'j, 'k, 'l))
+    lsort(input) shouldEqual output
+  }
 }
