@@ -74,7 +74,7 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
 
     actual shouldEqual expected
     split(6, intList) shouldEqual(intList, List.empty)
-    intercept[IllegalArgumentException](split(7, intList))
+    intercept[IndexOutOfBoundsException](split(7, intList))
   }
 
   "slice" should "take a slice of a list at the appropriate indices" in {
@@ -86,5 +86,13 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
   }
   it should "handle negative inputs corectly" in {
     rotate(-2, symbolList) shouldEqual List('j, 'k, 'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i)
+  }
+
+  "removeAt" should "remove one element from the nth position of the list" in {
+    removeAt(1, List('a, 'b, 'c, 'd)) shouldEqual ((List('a, 'c, 'd),'b))
+    removeAt(3, List('a, 'b, 'c, 'd)) shouldEqual ((List('a, 'b, 'c), 'd))
+  }
+  it should " throw an exception if out of bounds" in {
+    intercept[IndexOutOfBoundsException](removeAt(4, List('a, 'b, 'c, 'd)))
   }
 }

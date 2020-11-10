@@ -144,14 +144,16 @@ object WorkingWithLists {
       else recSplit(originalList.tail, newList ++ List(originalList.head), acc + 1)
     }
 
-    val splitIndexIsTooLarge = index > length(list)
-    if (splitIndexIsTooLarge) throw new IllegalArgumentException("You cannot split at an index larger than the list")
-    else recSplit(list)
+    throwIfIndexTooLarge(index, list)
+    recSplit(list)
 
   }
 
   //p18 extract a slice from a list
   def slice[A](start: Int, end: Int, list: List[A]): List[A] = {
+    throwIfIndexTooLarge(start, list)
+    throwIfIndexTooLarge(end, list)
+
     val bottomSlice = split(end, list)._1
     split(start, bottomSlice)._2
   }
@@ -164,12 +166,27 @@ object WorkingWithLists {
     splitLists._2 ++ splitLists._1
   }
 
+  //p20 remove nth element from the list
+  def removeAt[A](n: Int, list: List[A]): (List[A], A) = {
+    throwIfIndexTooLarge(n, list)
+
+    val (split1, end) = split(n, list)
+    val (loneElement, split2) = split(1, `end`)
+    (split1++split2, loneElement.head)
+  }
+
   private def inputTooShort(minListLength: Int) = {
     minListLength match {
       case 1 => throw new IllegalArgumentException(s"List must contain at least 1 element")
       case _ => throw new IllegalArgumentException(s"List must contain at least $minListLength elements")
     }
     throw new IllegalArgumentException(s"List must contain at least $minListLength elements")
+  }
+
+
+  private def throwIfIndexTooLarge[A](index: Int, list: List[A]): Unit = {
+    val splitIndexIsTooLarge = index > length(list)
+    if (splitIndexIsTooLarge) throw new IndexOutOfBoundsException("You cannot split at an index larger than the list")
   }
 
 }
