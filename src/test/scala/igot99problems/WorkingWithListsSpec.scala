@@ -65,12 +65,11 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
   }
 
   "split" should "split a list at the appropriate index" in {
-    val actual = split(3, symbolList)
+    val actual = split(symbolList, 3)
     val expected = (List('a, 'b, 'c), List('d, 'e, 'f, 'g, 'h, 'i, 'j, 'k))
 
     actual shouldEqual expected
-    split(6, intList) shouldEqual(intList, List.empty)
-    intercept[IndexOutOfBoundsException](split(7, intList))
+    split(intList, 6) shouldEqual(intList, List.empty)
   }
 
   "slice" should "take a slice of a list at the appropriate indices" in {
@@ -87,9 +86,6 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
   "removeAt" should "remove one element from the nth position of the list" in {
     removeAt(1, List('a, 'b, 'c, 'd)) shouldEqual ((List('a, 'c, 'd),'b))
     removeAt(3, List('a, 'b, 'c, 'd)) shouldEqual ((List('a, 'b, 'c), 'd))
-  }
-  it should " throw an exception if out of bounds" in {
-    intercept[IndexOutOfBoundsException](removeAt(4, List('a, 'b, 'c, 'd)))
   }
 
   "insertAt" should "correctly place a new element into a list" in {

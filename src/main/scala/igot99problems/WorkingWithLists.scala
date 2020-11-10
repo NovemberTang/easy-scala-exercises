@@ -1,6 +1,7 @@
 package igot99problems
 
 import scala.annotation.tailrec
+import scala.util.Random
 
 //http://aperiodic.net/phil/scala/s-99/
 object WorkingWithLists {
@@ -29,37 +30,24 @@ object WorkingWithLists {
   }
 
   //p03 find the kth element of a list
-  def nth[A](n: Int, list: List[A]): A = {
-    require(length(list) >= n, "List must contain at least as many elements as the argument")
-
-    @tailrec
-    def listRecurse(acc: Int, n: Int, list: List[A]): A = {
-      if (acc < n) listRecurse(acc + 1, n, list.tail)
-      else list.head
-    }
-
-    listRecurse(0, n, list)
-  }
+  @tailrec
+  def nth[A](n: Int, list: List[A], acc: Int = 0): A =
+    if (acc < n) nth(n, list.tail, acc + 1)
+    else list.head
 
   //p04 find the length of a list
-  def length[A](list: List[A]): Int = {
-    @tailrec
-    def listRecurse(acc: Int, list: List[A]): Int = if (list.isEmpty) acc else listRecurse(acc + 1, list.tail)
-
-    listRecurse(0, list)
+  @tailrec
+  def length[A](list: List[A], acc: Int = 0): Int = {
+    if (list.isEmpty) acc else length(list.tail, acc + 1)
   }
 
   //p05 reverse a list
-  def reverse[A](list: List[A]): List[A] = {
-    @tailrec
-    def reverseRecurse(inputList: List[A], outputList: List[A]): List[A] = {
-      inputList match {
-        case List() => outputList
-        case _ => reverseRecurse(inputList.init, outputList ++ List(inputList.last))
-      }
+  @tailrec
+  def reverse[A](inputList: List[A], outputList: List[A] = List.empty): List[A] = {
+    inputList match {
+      case List() => outputList
+      case _ => reverse(inputList.init, outputList ++ List(inputList.last))
     }
-
-    reverseRecurse(list, List.empty)
   }
 
   //p06 is a list a palindrome
@@ -77,20 +65,12 @@ object WorkingWithLists {
   }
 
   //p14 duplicate elements of a list
-  def duplicate[A](list: List[A]): List[A] = {
-
-    @tailrec
-    def duplicateRecurse(input: List[A], output: List[A] = List.empty): List[A] = {
-      input match {
-        case Nil => output
-        case x :: xs => duplicateRecurse(input.tail, output ++ List(x, x))
-      }
+  @tailrec
+  def duplicate[A](input: List[A], output: List[A] = List.empty): List[A] = {
+    input match {
+      case Nil => output
+      case x :: xs => duplicate(input.tail, output ++ List(x, x))
     }
-
-    duplicateRecurse(list)
-
-    //val duplicateList = list
-    //list.zip(duplicateList).flatMap(tup => List(tup._1, tup._2))
   }
 
   //p15 duplicate list elements a given number of times
@@ -131,21 +111,14 @@ object WorkingWithLists {
   }
 
   //p17 split a list into two parts
-  def split[A](index: Int, list: List[A]): (List[A], List[A]) = {
+  @tailrec
+  def split[A](originalList: List[A], index: Int, acc: Int = 0, newList: List[A] = List.empty): (List[A], List[A]) = {
 
-    @tailrec
-    def recSplit(originalList: List[A],
-                 newList: List[A] = List.empty,
-                 acc: Int = 0,
-                 index: Int = index): (List[A], List[A]) = {
-      val reachedFinalIndex: Boolean = acc == index
+    val reachedFinalIndex: Boolean = acc == index
 
-      if (reachedFinalIndex) (newList, originalList)
-      else recSplit(originalList.tail, newList ++ List(originalList.head), acc + 1)
-    }
+    if (reachedFinalIndex) (newList, originalList)
+    else split(originalList.tail, index, acc = acc + 1, newList = newList ++ List(originalList.head))
 
-    throwIfIndexTooLarge(index, list)
-    recSplit(list)
 
   }
 
@@ -154,15 +127,15 @@ object WorkingWithLists {
     throwIfIndexTooLarge(start, list)
     throwIfIndexTooLarge(end, list)
 
-    val bottomSlice = split(end, list)._1
-    split(start, bottomSlice)._2
+    val bottomSlice = split(list, end)._1
+    split(bottomSlice, start)._2
   }
 
   //p19 rotate a list n places to the left
   def rotate[A](n: Int, list: List[A]): List[A] = {
     val rotationIndex = if (n > 0) n % length(list) else (n % length(list)) + length(list)
 
-    val splitLists = split(rotationIndex, list)
+    val splitLists = split(list, rotationIndex)
     splitLists._2 ++ splitLists._1
   }
 
@@ -170,28 +143,24 @@ object WorkingWithLists {
   def removeAt[A](n: Int, list: List[A]): (List[A], A) = {
     throwIfIndexTooLarge(n, list)
 
-    val (split1, end) = split(n, list)
-    val (loneElement, split2) = split(1, end)
-    (split1++split2, loneElement.head)
+    val (split1, end) = split(list, n)
+    val (loneElement, split2) = split(end, 1)
+    (split1 ++ split2, loneElement.head)
   }
 
   //p21 insert element at a given position into a list
   def insertAt[A](elem: A, n: Int, list: List[A]): List[A] = {
     throwIfIndexTooLarge(n, list)
-    val (a,b) = split(n,list)
+    val (a, b) = split(list, n)
     a ++ List(elem) ++ b
   }
 
   //p22 create a list containing all integers in a given range
-  def range(start: Int, end: Int): List[Int] = {
-    require(start < end, "Range must be ascending")
-    @tailrec
-    def rangeRec(currentElem: Int, start: Int, list: List[Int]): List[Int] = {
-      val finalElement: Boolean = currentElem == start
-      if (finalElement) start :: list else rangeRec(currentElem - 1, start, currentElem :: list)
-    }
-
-    rangeRec(end, start, List())
+  @tailrec
+  def range(start: Int, end: Int, list: List[Int] = List.empty): List[Int] = {
+    require(start <= end, "Range must be ascending")
+    val finalElement: Boolean = end == start
+    if (finalElement) start :: list else range(start, end - 1, end :: list)
   }
 
   //p23 Extract a given number of randomly selected elements from a list.
@@ -211,7 +180,7 @@ object WorkingWithLists {
     n match {
       case 0 => outlist
       case _ =>
-        randomSelect(n-1, inlist, updatedRandomList)
+        randomSelect(n - 1, inlist, updatedRandomList)
     }
   }
 
