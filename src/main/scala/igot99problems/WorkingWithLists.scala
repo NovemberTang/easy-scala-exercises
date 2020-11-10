@@ -50,7 +50,12 @@ object WorkingWithLists {
   def isPalindrome[A](list: List[A]): Boolean = list == reverse(list)
 
   //p07 flatten nested lists
-  def flatten(list: List[Any]): List[Int] = ???
+  def flatten(list: List[Any]): List[Any] = {
+    list.flatMap {
+      case elem => List(elem)
+      case sublist: List[_] => flatten(sublist)
+    }
+  }
 
   //p08 eliminate consecutive duplicates
   def compress[A](list: List[A]): List[A] = {
@@ -205,6 +210,7 @@ object WorkingWithLists {
   //p27
 
   //p28 sort list of lists by sublist length
+  //TODO part B
   def lsort[A](list: List[List[A]]): List[List[A]] = {
     val lengthList = list.map(sublist => length(sublist))
     val sortedZipList: List[(Int, List[A])] = lengthList.zip(list).sortBy(_._1)
