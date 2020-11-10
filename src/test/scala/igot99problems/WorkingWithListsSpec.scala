@@ -10,14 +10,10 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
   private val symbolList = List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k)
 
   "last" should "return the last element of that list" in {
-
     last(intList) shouldEqual 8
-
   }
   it should "throw an IllegalArgumentException when given an empty list" in {
-
     intercept[IllegalArgumentException](last(List.empty))
-
   }
 
   "penultimate" should "return the last but one element of that list" in {
@@ -105,5 +101,10 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
   }
   it should "throw an exception if given invalid arguments" in {
     intercept[IllegalArgumentException](range(3,0))
+  }
+
+  "randomSelect" should "select n random elements from a list" in {
+    val output = randomSelect(3, List('a, 'b, 'c, 'd, 'f, 'g, 'h))
+    output should have length 3
   }
 }

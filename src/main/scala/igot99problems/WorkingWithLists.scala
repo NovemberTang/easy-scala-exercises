@@ -175,14 +175,6 @@ object WorkingWithLists {
     (split1++split2, loneElement.head)
   }
 
-  private def inputTooShort(minListLength: Int) = {
-    minListLength match {
-      case 1 => throw new IllegalArgumentException(s"List must contain at least 1 element")
-      case _ => throw new IllegalArgumentException(s"List must contain at least $minListLength elements")
-    }
-    throw new IllegalArgumentException(s"List must contain at least $minListLength elements")
-  }
-
   //p21 insert element at a given position into a list
   def insertAt[A](elem: A, n: Int, list: List[A]): List[A] = {
     throwIfIndexTooLarge(n, list)
@@ -201,6 +193,36 @@ object WorkingWithLists {
 
     rangeRec(end, start, List())
   }
+
+  //p23 Extract a given number of randomly selected elements from a list.
+  @tailrec
+  def randomSelect[A](n: Int, inlist: List[A], outlist: List[A] = List.empty): List[A] = {
+
+    def addElementToRandomList(inlist: List[A], outlist: List[A]) = {
+      val rand = scala.util.Random
+      val listLength: Int = length(inlist)
+      val randomIndex = rand.nextInt(listLength)
+      val randomListElem = nth(randomIndex, inlist)
+      randomListElem :: outlist
+    }
+
+    val updatedRandomList = addElementToRandomList(inlist, outlist)
+
+    n match {
+      case 0 => outlist
+      case _ =>
+        randomSelect(n-1, inlist, updatedRandomList)
+    }
+  }
+
+  private def inputTooShort(minListLength: Int) = {
+    minListLength match {
+      case 1 => throw new IllegalArgumentException(s"List must contain at least 1 element")
+      case _ => throw new IllegalArgumentException(s"List must contain at least $minListLength elements")
+    }
+    throw new IllegalArgumentException(s"List must contain at least $minListLength elements")
+  }
+
   private def throwIfIndexTooLarge[A](index: Int, list: List[A]): Unit = {
     val indexIsTooLarge = index > length(list)
     if (indexIsTooLarge) throw new IndexOutOfBoundsException("Index cannot be larger than the length of the list")
