@@ -113,13 +113,10 @@ object WorkingWithLists {
   //p17 split a list into two parts
   @tailrec
   def split[A](originalList: List[A], index: Int, acc: Int = 0, newList: List[A] = List.empty): (List[A], List[A]) = {
-
     val reachedFinalIndex: Boolean = acc == index
 
     if (reachedFinalIndex) (newList, originalList)
     else split(originalList.tail, index, acc = acc + 1, newList = newList ++ List(originalList.head))
-
-
   }
 
   //p18 extract a slice from a list
@@ -177,7 +174,6 @@ object WorkingWithLists {
 
   //p24 Lotto: Draw N different random numbers from the set 1..M.
   def lotto(numberOfElements: Int, rangeMax: Int): List[Int] = {
-
     val newRange = range(1, rangeMax)
     randomSelect(numberOfElements, newRange)
   }
