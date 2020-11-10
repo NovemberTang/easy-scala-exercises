@@ -65,10 +65,8 @@ object WorkingWithLists {
   //p06 is a list a palindrome
   def isPalindrome[A](list: List[A]): Boolean = list == reverse(list)
 
-
   //p07 flatten nested lists
   def flatten(list: List[Any]): List[Int] = ???
-
 
   //p08 eliminate consecutive duplicates
   def compress[A](list: List[A]): List[A] = {
@@ -119,7 +117,7 @@ object WorkingWithLists {
                 outputOfLastCall: List[A] = List.empty,
                 n: Int = n): List[A] = {
 
-      val indexIsMultipleOfN: Boolean = acc%n == 0
+      val indexIsMultipleOfN: Boolean = acc % n == 0
 
       input match {
         case Nil => outputOfLastCall
@@ -136,7 +134,7 @@ object WorkingWithLists {
   def split[A](index: Int, list: List[A]): (List[A], List[A]) = {
 
     @tailrec
-    def recSplit(originalList:List[A],
+    def recSplit(originalList: List[A],
                  newList: List[A] = List.empty,
                  acc: Int = 0,
                  index: Int = index): (List[A], List[A]) = {
@@ -146,10 +144,24 @@ object WorkingWithLists {
       else recSplit(originalList.tail, newList ++ List(originalList.head), acc + 1)
     }
 
-    val splitIndexIsTooLarge = length(list) >= index
+    val splitIndexIsTooLarge = index > length(list)
     if (splitIndexIsTooLarge) throw new IllegalArgumentException("You cannot split at an index larger than the list")
     else recSplit(list)
 
+  }
+
+  //p18 extract a slice from a list
+  def slice[A](start: Int, end: Int, list: List[A]): List[A] = {
+    val bottomSlice = split(end, list)._1
+    split(start, bottomSlice)._2
+  }
+
+  //p19 rotate a list n places to the left
+  def rotate[A](n: Int, list: List[A]): List[A] = {
+    val rotationIndex = if (n > 0) n % length(list) else (n % length(list)) + length(list)
+
+    val splitLists = split(rotationIndex, list)
+    splitLists._2 ++ splitLists._1
   }
 
   private def inputTooShort(minListLength: Int) = {
