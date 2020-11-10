@@ -9,37 +9,32 @@ object WorkingWithLists {
   //p01 Find the last element of a list
   @tailrec
   def last[A](list: List[A]): A = {
+    throwIfListTooShort(1, list)
+
     list match {
-      case Nil => inputTooShort(1)
       case x :: Nil => x
-      case x :: xs => last(list.tail)
+      case _ => last(list.tail)
     }
   }
 
   //p02 find the penultimate element of a list
   @tailrec
   def penultimate[A](list: List[A]): A = {
-
+    throwIfListTooShort(2, list)
     list match {
-      case Nil => inputTooShort(2)
-      case x :: Nil => inputTooShort(2)
       case x :: y :: Nil => x
-      case x :: y :: xs => penultimate(list.tail)
+      case _ => penultimate(list.tail)
     }
 
   }
 
   //p03 find the kth element of a list
   @tailrec
-  def nth[A](n: Int, list: List[A], acc: Int = 0): A =
-    if (acc < n) nth(n, list.tail, acc + 1)
-    else list.head
+  def nth[A](n: Int, list: List[A], acc: Int = 0): A = if (acc < n) nth(n, list.tail, acc + 1) else list.head
 
   //p04 find the length of a list
   @tailrec
-  def length[A](list: List[A], acc: Int = 0): Int = {
-    if (list.isEmpty) acc else length(list.tail, acc + 1)
-  }
+  def length[A](list: List[A], acc: Int = 0): Int = if (list.isEmpty) acc else length(list.tail, acc + 1)
 
   //p05 reverse a list
   @tailrec
@@ -75,6 +70,8 @@ object WorkingWithLists {
 
   //p15 duplicate list elements a given number of times
   def duplicateN[A](n: Int, list: List[A]): List[A] = {
+    throwIfListTooShort(1, list)
+
     def createDuplicatesOfELement(elem: A, n: Int = n, input: List[A] = List.empty): List[A] = {
       n match {
         case 0 => input
@@ -83,7 +80,6 @@ object WorkingWithLists {
     }
 
     n match {
-      case 0 => inputTooShort(1)
       case 1 => list
       case _ => list.flatMap(createDuplicatesOfELement(_))
     }
@@ -168,7 +164,7 @@ object WorkingWithLists {
   def randomSelect[A](n: Int, inlist: List[A], outlist: List[A] = List.empty): List[A] = {
 
     def addElementToRandomList(inlist: List[A], outlist: List[A]) = {
-      val rand = scala.util.Random
+      val rand = Random
       val listLength: Int = length(inlist)
       val randomIndex = rand.nextInt(listLength)
       val randomListElem = nth(randomIndex, inlist)
@@ -184,12 +180,22 @@ object WorkingWithLists {
     }
   }
 
-  private def inputTooShort(minListLength: Int) = {
-    minListLength match {
-      case 1 => throw new IllegalArgumentException(s"List must contain at least 1 element")
-      case _ => throw new IllegalArgumentException(s"List must contain at least $minListLength elements")
+  //p24 Lotto: Draw N different random numbers from the set 1..M.
+  def lotto(numberOfElements: Int, rangeMax: Int): List[Int] = {
+
+    val newRange = range(1, rangeMax)
+    randomSelect(numberOfElements, newRange)
+  }
+
+  private def throwIfListTooShort[A](minListLength: Int, list: List[A]): Unit = {
+    val listIsTooShort: Boolean = length(list) < minListLength
+
+    if (listIsTooShort) {
+      minListLength match {
+        case 1 => throw new IllegalArgumentException(s"List must contain at least 1 element")
+        case _ => throw new IllegalArgumentException(s"List must contain at least $minListLength elements")
+      }
     }
-    throw new IllegalArgumentException(s"List must contain at least $minListLength elements")
   }
 
   private def throwIfIndexTooLarge[A](index: Int, list: List[A]): Unit = {

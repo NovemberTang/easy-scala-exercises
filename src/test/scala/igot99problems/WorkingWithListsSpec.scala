@@ -103,4 +103,8 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
     val output = randomSelect(3, List('a, 'b, 'c, 'd, 'f, 'g, 'h))
     output should have length 3
   }
+
+  "lotto" should "draw n different elements from a range" in {
+    lotto(6, 49) should have length(6)
+  }
 }
