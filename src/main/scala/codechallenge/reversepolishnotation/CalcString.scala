@@ -21,7 +21,6 @@ class CalcString(val string: String) {
 
 
   private def calculate(string: String): Double = {
-    println(s"calculate $string")
     val calculationCharList = string.split(" ")
     val operands = calculationCharList.dropRight(1).map(_.toDouble)
     val operator = calculationCharList.last

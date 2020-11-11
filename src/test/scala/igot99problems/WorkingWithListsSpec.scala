@@ -43,7 +43,7 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
     isPalindrome(intList) shouldEqual false
   }
 
-  ignore should "flatten a nested list" in {
+  "list" should "flatten a nested list" in {
     flatten(List(List(1, 1), 2, List(3, List(5, 8)))) shouldEqual intList
   }
 
