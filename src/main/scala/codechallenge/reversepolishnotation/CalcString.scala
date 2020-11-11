@@ -34,6 +34,7 @@ class CalcString(val string: String) {
     }
   }
 
+  @tailrec
   private def buildString(inputString: String, outputString: String = ""): (Double, Int) = {
     val newOutput = outputString + inputString.head
     val notAValidCalculation = newOutput.split(" ").length < 3
