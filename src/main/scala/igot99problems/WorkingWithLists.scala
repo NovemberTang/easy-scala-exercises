@@ -58,48 +58,24 @@ object WorkingWithLists {
   }
 
   //p08 eliminate consecutive duplicates
-  def compress[A](list: List[A]): List[A] = {
-    list match {
-      case List() => List()
-      case x :: xs => List(x) ++ compress(xs.dropWhile(_ == x))
-    }
-  }
+  def compress[A](list: List[A]): List[A] = pack(list).map(_.head)
 
   //p09 pack consecutive duplicates into sublists
   def pack[A](list: List[A]): List[List[A]] = {
 
-    val inputList = list.tail
-    val outputList = List(List(list.head))
 
     @tailrec
-    def packRecurse(inputList: List[A], outputList: List[List[A]]): List[List[A]] = {
+    def packRecurse(inputList: List[A], outputList: List[List[A]] = List.empty): List[List[A]] = {
 
       inputList match {
-        case List() => outputList
-        case _ =>
-          val nextElem = inputList.head
-          val lastElem = outputList.last.head
-          val nextElemMatchesLastElem = nextElem == lastElem
-
-          if (nextElemMatchesLastElem) {
-            val newList: List[List[A]] = modifySublist(inputList, outputList)
-            packRecurse(inputList.tail, newList)
-          }
-          else {
-            val addedAsSeparateItem: List[List[A]] = addNewSublist(inputList, outputList)
-            packRecurse(inputList.tail, addedAsSeparateItem)
-          }
+        case Nil => outputList
+        case _  =>
+          val (newOutput, newInput) = inputList.span(_ == inputList.head)
+          packRecurse(newInput, outputList ++ List(newOutput))
       }
     }
 
-    def modifySublist(inputList: List[A], outputList: List[List[A]]): List[List[A]] = {
-      val modifiedSublist = List(outputList.last ++ List(inputList.head))
-      outputList.dropRight(1) ++ modifiedSublist
-    }
-
-    def addNewSublist(inputList: List[A], outputList: List[List[A]]): List[List[A]] = outputList ++ List(List(inputList.head))
-
-    packRecurse(inputList, outputList)
+    packRecurse(list)
   }
 
   //p14 duplicate elements of a list
