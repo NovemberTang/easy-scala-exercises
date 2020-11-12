@@ -65,6 +65,43 @@ object WorkingWithLists {
     }
   }
 
+  //p09 pack consecutive duplicates into sublists
+  def pack[A](list: List[A]): List[List[A]] = {
+
+    val inputList = list.tail
+    val outputList = List(List(list.head))
+
+    @tailrec
+    def packRecurse(inputList: List[A], outputList: List[List[A]]): List[List[A]] = {
+
+      inputList match {
+        case List() => outputList
+        case _ =>
+          val nextElem = inputList.head
+          val lastElem = outputList.last.head
+          val nextElemMatchesLastElem = nextElem == lastElem
+
+          if (nextElemMatchesLastElem) {
+            val newList: List[List[A]] = modifySublist(inputList, outputList)
+            packRecurse(inputList.tail, newList)
+          }
+          else {
+            val addedAsSeparateItem: List[List[A]] = addNewSublist(inputList, outputList)
+            packRecurse(inputList.tail, addedAsSeparateItem)
+          }
+      }
+    }
+
+    def modifySublist(inputList: List[A], outputList: List[List[A]]): List[List[A]] = {
+      val modifiedSublist = List(outputList.last ++ List(inputList.head))
+      outputList.dropRight(1) ++ modifiedSublist
+    }
+
+    def addNewSublist(inputList: List[A], outputList: List[List[A]]): List[List[A]] = outputList ++ List(List(inputList.head))
+
+    packRecurse(inputList, outputList)
+  }
+
   //p14 duplicate elements of a list
   @tailrec
   def duplicate[A](input: List[A], output: List[A] = List.empty): List[A] = {
@@ -76,16 +113,16 @@ object WorkingWithLists {
   def duplicateN[A](n: Int, list: List[A]): List[A] = {
     throwIfListTooShort(1, list)
 
-    def createDuplicatesOfELement(elem: A, n: Int = n, input: List[A] = List.empty): List[A] = {
+    def createDuplicatesOfElement(elem: A, n: Int = n, input: List[A] = List.empty): List[A] = {
       n match {
         case 0 => input
-        case _ => elem :: createDuplicatesOfELement(elem, n - 1, input)
+        case _ => elem :: createDuplicatesOfElement(elem, n - 1, input)
       }
     }
 
     n match {
       case 1 => list
-      case _ => list.flatMap(createDuplicatesOfELement(_))
+      case _ => list.flatMap(createDuplicatesOfElement(_))
     }
   }
 

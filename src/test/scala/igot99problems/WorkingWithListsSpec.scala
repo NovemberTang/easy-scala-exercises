@@ -51,6 +51,10 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
     compress(List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e)) shouldEqual List('a, 'b, 'c, 'a, 'd, 'e)
   }
 
+  "pack" should "put duplicate elements into sublists" in {
+    pack(List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e)) shouldEqual List(List('a, 'a, 'a, 'a), List('b), List('c, 'c), List('a, 'a), List('d), List('e, 'e, 'e, 'e))
+  }
+
   "duplicate" should "duplicate each element of a list" in {
     duplicate(intList) shouldEqual List(1, 1, 1, 1, 2, 2, 3, 3, 5, 5, 8, 8)
   }
