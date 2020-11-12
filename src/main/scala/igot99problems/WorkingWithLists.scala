@@ -71,6 +71,34 @@ object WorkingWithLists {
     }
   }
 
+  //p10 run length encoding of a list
+  def encode[A](input: List[A]): List[(Int, A)] = {
+    throwIfListTooShort(1, input)
+    val packedList = pack(input)
+    packedList.map(sublist => (length(sublist), sublist.head))
+  }
+
+  //p11 modify the result of problem P10 in such a way that if an element has no duplicates
+  // it is simply copied into the result list.
+  // Only elements with duplicates are transferred as (N, E) terms.
+  def encodeModified[A](list: List[A]): List[Any] = {
+
+    def convertTupleToInt(tuple: (Int, A)): Any = {
+      tuple._1 match {
+        case 1 => tuple._2
+        case _ => tuple
+      }
+    }
+
+    encode(list).map(convertTupleToInt)
+  }
+
+  //p12 decode a run length encoded list
+  def decode[A](list: List[(Int, A)]): List[A] = {
+    def recreateSublist(runLengthTuple: (Int, A)): List[A] = duplicateN(runLengthTuple._1, List(runLengthTuple._2))
+    list.flatMap(recreateSublist)
+  }
+
   //p14 duplicate elements of a list
   @tailrec
   def duplicate[A](input: List[A], output: List[A] = List.empty): List[A] = {
