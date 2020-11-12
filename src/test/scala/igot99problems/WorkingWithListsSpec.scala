@@ -69,6 +69,10 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
     decode(List((4, 'a), (1, 'b), (2, 'c), (2, 'a), (1, 'd), (4, 'e))) shouldEqual longSymbolList
   }
 
+  "encodeDirect" should "show the run length encoding of a packed list" in {
+    encodeDirect(longSymbolList) shouldEqual List((4,'a), (1,'b), (2,'c), (2,'a), (1,'d), (4,'e))
+  }
+
   "duplicate" should "duplicate each element of a list" in {
     duplicate(intList) shouldEqual List(1, 1, 1, 1, 2, 2, 3, 3, 5, 5, 8, 8)
   }

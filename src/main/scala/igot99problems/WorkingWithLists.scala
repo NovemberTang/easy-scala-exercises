@@ -82,14 +82,7 @@ object WorkingWithLists {
   // it is simply copied into the result list.
   // Only elements with duplicates are transferred as (N, E) terms.
   def encodeModified[A](list: List[A]): List[Any] = {
-
-    def convertTupleToInt(tuple: (Int, A)): Any = {
-      tuple._1 match {
-        case 1 => tuple._2
-        case _ => tuple
-      }
-    }
-
+    def convertTupleToInt(tuple: (Int, A)): Any = if (tuple._1 == 1) tuple._2 else tuple
     encode(list).map(convertTupleToInt)
   }
 
@@ -97,6 +90,18 @@ object WorkingWithLists {
   def decode[A](list: List[(Int, A)]): List[A] = {
     def recreateSublist(runLengthTuple: (Int, A)): List[A] = duplicateN(runLengthTuple._1, List(runLengthTuple._2))
     list.flatMap(recreateSublist)
+  }
+
+  //p13 implement encode directly
+  @tailrec
+  def encodeDirect[A](inputList: List[A], outputList: List[(Int, A)] = List.empty): List[(Int, A)] = {
+    inputList match {
+      case Nil => outputList
+      case _ =>
+        val (sublist, newInput): (List[A], List[A]) = inputList.span(_ == inputList.head)
+        val newOutput: (Int, A) = if (sublist.length == 1) (1, sublist.head) else (sublist.length, sublist.head)
+        encodeDirect(newInput, outputList ++ List(newOutput))
+    }
   }
 
   //p14 duplicate elements of a list
@@ -126,34 +131,25 @@ object WorkingWithLists {
   //p16 drop every nth element from a list
   def drop[A](n: Int, list: List[A]): List[A] = {
     @tailrec
-    def dropRec(acc: Int,
-                input: List[A] = list,
-                outputOfLastCall: List[A] = List.empty,
-                n: Int = n): List[A] = {
-
+    def dropRec(n: Int, input: List[A], outputOfLastCall: List[A] = List.empty, acc: Int = 1): List[A] = {
       val indexIsMultipleOfN: Boolean = acc % n == 0
 
       input match {
         case Nil => outputOfLastCall
         case _ =>
-          if (indexIsMultipleOfN) dropRec(acc + 1, input.tail, outputOfLastCall)
-          else dropRec(acc + 1, input.tail, outputOfLastCall ++ List(input.head))
+          if (indexIsMultipleOfN) dropRec(n, input.tail, outputOfLastCall, acc + 1)
+          else dropRec(n, input.tail, outputOfLastCall ++ List(input.head), acc + 1)
       }
     }
-
-    dropRec(1)
+    dropRec(n, list)
   }
 
   //p17 split a list into two parts
   @tailrec
   def split[A](originalList: List[A], index: Int, acc: Int = 0, newList: List[A] = List.empty): (List[A], List[A]) = {
-
     val reachedFinalIndex: Boolean = acc == index
-
     if (reachedFinalIndex) (newList, originalList)
     else split(originalList.tail, index, acc = acc + 1, newList = newList ++ List(originalList.head))
-
-
   }
 
   //p18 extract a slice from a list
@@ -168,7 +164,6 @@ object WorkingWithLists {
   //p19 rotate a list n places to the left
   def rotate[A](n: Int, list: List[A]): List[A] = {
     val rotationIndex = if (n > 0) n % length(list) else (n % length(list)) + length(list)
-
     val splitLists = split(list, rotationIndex)
     splitLists._2 ++ splitLists._1
   }
