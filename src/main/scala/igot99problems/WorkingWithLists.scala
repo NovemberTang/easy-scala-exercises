@@ -61,21 +61,14 @@ object WorkingWithLists {
   def compress[A](list: List[A]): List[A] = pack(list).map(_.head)
 
   //p09 pack consecutive duplicates into sublists
-  def pack[A](list: List[A]): List[List[A]] = {
-
-
-    @tailrec
-    def packRecurse(inputList: List[A], outputList: List[List[A]] = List.empty): List[List[A]] = {
-
-      inputList match {
-        case Nil => outputList
-        case _  =>
-          val (newOutput, newInput) = inputList.span(_ == inputList.head)
-          packRecurse(newInput, outputList ++ List(newOutput))
-      }
+  @tailrec
+  def pack[A](inputList: List[A], outputList: List[List[A]] = List.empty): List[List[A]] = {
+    inputList match {
+      case Nil => outputList
+      case _ =>
+        val (newOutput, newInput) = inputList.span(_ == inputList.head)
+        pack(newInput, outputList ++ List(newOutput))
     }
-
-    packRecurse(list)
   }
 
   //p14 duplicate elements of a list

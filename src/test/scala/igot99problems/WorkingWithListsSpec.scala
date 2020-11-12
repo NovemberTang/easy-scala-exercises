@@ -52,7 +52,9 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
   }
 
   "pack" should "put duplicate elements into sublists" in {
-    pack(List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e)) shouldEqual List(List('a, 'a, 'a, 'a), List('b), List('c, 'c), List('a, 'a), List('d), List('e, 'e, 'e, 'e))
+    val inputList = List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e)
+    val outputList = List(List('a, 'a, 'a, 'a), List('b), List('c, 'c), List('a, 'a), List('d), List('e, 'e, 'e, 'e))
+    pack(inputList) shouldEqual outputList
   }
 
   "duplicate" should "duplicate each element of a list" in {
