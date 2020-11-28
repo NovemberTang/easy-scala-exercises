@@ -25,7 +25,6 @@ object Arithmetic {
   }
 
   //p32 find greatest common divisor of two positive integers
-
   def gcd(a: Int, b: Int): Int = {
     val largestPossible = if (a < b) a else b
     val possibleAnswers = createDescLazyList(largestPossible, 1)
@@ -41,7 +40,7 @@ object Arithmetic {
 
   private def createDescLazyList(hi: Int, lo: Int): LazyList[Int] = {
     if (lo >= hi) LazyList.empty
-    else LazyList.cons(hi, createDescLazyList(hi - 1, lo))
+    else hi #:: createDescLazyList(hi - 1, lo)
   }
 
   //p33 determine whether two positive integers are coprime
