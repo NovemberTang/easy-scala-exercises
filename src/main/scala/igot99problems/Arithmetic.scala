@@ -1,9 +1,11 @@
 package igot99problems
 
-import WorkingWithLists.range
 import scala.annotation.tailrec
+import scala.language.implicitConversions
 
 object Arithmetic {
+
+  implicit def intToInteger(int: Int): Integer = new Integer(int)
 
   //p31 determine whether an integer is prime
   def isPrime(int: Int): Boolean = {
@@ -37,7 +39,15 @@ object Arithmetic {
     if (a == 1 || b == 1) 1 else findGcd(possibleAnswers, a, b)
   }
 
-  private def createDescLazyList(hi: Int, lo: Int): LazyList[Int] =
+  private def createDescLazyList(hi: Int, lo: Int): LazyList[Int] = {
     if (lo >= hi) LazyList.empty
     else LazyList.cons(hi, createDescLazyList(hi - 1, lo))
+  }
+
+  //p33 determine whether two positive integers are coprime
+  class Integer(value: Int){
+    def isCoprimeTo(int: Int): Boolean = gcd(value,int) == 1
+  }
+
 }
+

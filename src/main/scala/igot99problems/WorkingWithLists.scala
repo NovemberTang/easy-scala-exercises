@@ -52,8 +52,8 @@ object WorkingWithLists {
   //p07 flatten nested lists
   def flatten(list: List[Any]): List[Any] = {
     list.flatMap {
-      case elem => List(elem)
       case sublist: List[_] => flatten(sublist)
+      case elem => List(elem)
     }
   }
 

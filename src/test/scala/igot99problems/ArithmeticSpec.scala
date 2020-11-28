@@ -18,4 +18,11 @@ class ArithmeticSpec extends AnyFlatSpec with Matchers {
     gcd(1, 4) shouldEqual 1
   }
 
+  "an integer" should "be able to work out whether another integer is coprime with it" in {
+    3.isCoprimeTo(1) shouldBe true
+    3.isCoprimeTo(36) shouldBe false
+    36.isCoprimeTo(3) shouldBe false
+    8.isCoprimeTo(64) shouldBe false
+  }
+
 }
