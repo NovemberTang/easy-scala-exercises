@@ -206,7 +206,6 @@ object WorkingWithLists {
 
   //p24 Lotto: Draw N different random numbers from the set 1..M.
   def lotto(numberOfElements: Int, rangeMax: Int): List[Int] = {
-
     val newRange = range(1, rangeMax)
     randomSelect(numberOfElements, newRange)
   }

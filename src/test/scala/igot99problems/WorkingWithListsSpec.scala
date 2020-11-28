@@ -8,7 +8,9 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
 
   private val intList = List(1, 1, 2, 3, 5, 8)
   private val symbolList = List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k)
+  private val charList = List('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k')
   private val longSymbolList = List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e)
+
 
   "last" should "return the last element of that list" in {
     last(intList) shouldEqual 8
@@ -44,7 +46,7 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
     isPalindrome(intList) shouldEqual false
   }
 
-  "list" should "flatten a nested list" in {
+  "flatten" should "flatten a nested list" in {
     flatten(List(List(1, 1), 2, List(3, List(5, 8)))) shouldEqual intList
   }
 
@@ -99,15 +101,15 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
   }
 
   "rotate" should "rotate a list n places to the left" in {
-    rotate(3, symbolList) shouldEqual List('d, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'a, 'b, 'c)
+    rotate(3, charList) shouldEqual List('d', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'a', 'b', 'c')
   }
   it should "handle negative inputs corectly" in {
-    rotate(-2, symbolList) shouldEqual List('j, 'k, 'a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i)
+    rotate(-2, charList) shouldEqual List('j', 'k', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i')
   }
 
   "removeAt" should "remove one element from the nth position of the list" in {
-    removeAt(1, List('a, 'b, 'c, 'd)) shouldEqual ((List('a, 'c, 'd),'b))
-    removeAt(3, List('a, 'b, 'c, 'd)) shouldEqual ((List('a, 'b, 'c), 'd))
+    removeAt(1, List('a', 'b', 'c', 'd')) shouldEqual ((List('a', 'c', 'd'),'b'))
+    removeAt(3, List('a', 'b', 'c', 'd')) shouldEqual ((List('a', 'b', 'c'), 'd'))
   }
 
   "insertAt" should "correctly place a new element into a list" in {
@@ -131,7 +133,7 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
   }
 
   "randomPermute" should "return all list elements in a random order" in {
-    val input = List('a, 'b, 'c, 'd, 'e, 'f)
+    val input = List('a', 'b', 'c', 'd', 'e', 'f')
     val output = randomPermute(input)
     output should contain theSameElementsAs input
   }
