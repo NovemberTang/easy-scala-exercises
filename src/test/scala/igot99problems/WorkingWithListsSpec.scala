@@ -9,6 +9,8 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
   private val intList = List(1, 1, 2, 3, 5, 8)
   private val symbolList = List('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k)
   private val charList = List('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k')
+  private val longSymbolList = List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e)
+
 
   "last" should "return the last element of that list" in {
     last(intList) shouldEqual 8
@@ -49,8 +51,28 @@ class WorkingWithListsSpec extends AnyFlatSpec with Matchers {
   }
 
   "compress" should "remove consecutive duplicates" in {
-    val input = List('a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e')
-    compress(input) shouldEqual List('a', 'b', 'c', 'a', 'd', 'e')
+    compress(longSymbolList) shouldEqual List('a, 'b, 'c, 'a, 'd, 'e)
+  }
+
+  "pack" should "put duplicate elements into sublists" in {
+    val outputList = List(List('a, 'a, 'a, 'a), List('b), List('c, 'c), List('a, 'a), List('d), List('e, 'e, 'e, 'e))
+    pack(longSymbolList) shouldEqual outputList
+  }
+
+  "encode" should "show the run length encoding of a packed list" in {
+    encode(longSymbolList) shouldEqual List((4,'a), (1,'b), (2,'c), (2,'a), (1,'d), (4,'e))
+  }
+
+  "encodeModified" should "return single elements as themselves" in {
+    encodeModified(longSymbolList) shouldEqual List((4,'a), 'b, (2,'c), (2,'a), 'd, (4,'e))
+  }
+
+  "decode" should "decode a run length encoded list" in {
+    decode(List((4, 'a), (1, 'b), (2, 'c), (2, 'a), (1, 'd), (4, 'e))) shouldEqual longSymbolList
+  }
+
+  "encodeDirect" should "show the run length encoding of a packed list" in {
+    encodeDirect(longSymbolList) shouldEqual List((4,'a), (1,'b), (2,'c), (2,'a), (1,'d), (4,'e))
   }
 
   "duplicate" should "duplicate each element of a list" in {
