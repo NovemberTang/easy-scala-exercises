@@ -9,22 +9,35 @@ object Arithmetic {
   def isPrime(int: Int): Boolean = {
 
     @tailrec
-    def primeRecurse(int: Int, divisors: List[Int]): Boolean = {
-      divisors match {
-        case List(1) => true
+    def primeRecurse(int: Int, factors: LazyList[Int]): Boolean = {
+      factors match {
+        case LazyList(1) => true
         case _ =>
-          val nonPrime = int % divisors.last == 0
-          if (nonPrime) false
-          else primeRecurse(int, divisors.init)
+          val nonPrime = int % factors.head == 0
+          if (nonPrime) false else primeRecurse(int, factors.tail)
       }
     }
 
-    int match {
-      case 0 => false
-      case 1 => false
-      case _ => primeRecurse(int, range(1, Math.sqrt(int).toInt))
-    }
-
+    val possibleFactors = createDescLazyList(Math.sqrt(int).toInt, 0)
+    if(int == 1) false else primeRecurse(int, possibleFactors)
   }
 
+  //p32 find greatest common divisor of two positive integers
+
+  def gcd(a: Int, b: Int): Int = {
+    val largestPossible = if (a < b) a else b
+    val possibleAnswers = createDescLazyList(largestPossible, 1)
+
+    @tailrec
+    def findGcd(stream: LazyList[Int], a: Int, b: Int): Int = {
+      val streamHeadDividesBoth: Boolean = a % stream.head == 0 && b % stream.head == 0
+      if (streamHeadDividesBoth) stream.head else findGcd(stream.tail, a, b)
+    }
+
+    if (a == 1 || b == 1) 1 else findGcd(possibleAnswers, a, b)
+  }
+
+  private def createDescLazyList(hi: Int, lo: Int): LazyList[Int] =
+    if (lo >= hi) LazyList.empty
+    else LazyList.cons(hi, createDescLazyList(hi - 1, lo))
 }
