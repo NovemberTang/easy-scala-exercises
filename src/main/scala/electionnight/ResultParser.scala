@@ -10,7 +10,8 @@ object ResultParser {
 
   }
 
-  def lineToConstituencyScore(string: String): ConstituencyScore = {
+  private def lineToConstituencyScore(string: String): ConstituencyScore = {
+    require(string.contains(", "))
     val lineArray = string.split(", ")
     val (constituency, votes) = (lineArray.head, lineArray.tail.sliding(2, 2).map(_.toList))
 
@@ -20,17 +21,27 @@ object ResultParser {
 
   }
 
-  def readLineWithErrorHandling(string: String): String = {
+  def readLineWithErrorHandling(string: String): Option[String] = {
     val x = Try(lineToConstituencyScore(string))
     x match {
-      case Success(constituencyScore) => constituencyScore.toString
+      case Success(constituencyScore) => Some(constituencyScore.toString + "\n")
       case Failure(_) => {
         val constituency = string.split(", ").headOption
-        if (constituency.isDefined) s"Failed to get data for <${constituency.get}>"
-        else "Failed to get data for an unknown constituency"
+        if (constituency.isDefined) {
+          println(s"Failed to get data for <${constituency.get}>")
+          None
+        }
+        else {
+          println("Failed to get data for an unknown constituency")
+          None
+        }
 
       }
     }
+  }
+
+  def parseAllResults(results: Iterator[String]): Iterator[String] = {
+    results.flatMap(readLineWithErrorHandling)
   }
 
 }
