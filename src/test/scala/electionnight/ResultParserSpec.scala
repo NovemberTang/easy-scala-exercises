@@ -40,6 +40,4 @@ class ResultParserSpec extends AnyFlatSpec with Matchers {
     parseAllResults(resultsList).toSeq shouldEqual expectedResult
   }
 
-
-
 }
