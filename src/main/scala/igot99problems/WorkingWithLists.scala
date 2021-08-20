@@ -42,7 +42,7 @@ object WorkingWithLists {
   def reverse[A](inputList: List[A], outputList: List[A] = List.empty): List[A] = {
     inputList match {
       case List() => outputList
-      case _ => reverse(inputList.init, outputList ++ List(inputList.last))
+      case _ => reverse(inputList.init, outputList :+ inputList.last)
     }
   }
 
@@ -67,7 +67,7 @@ object WorkingWithLists {
       case Nil => outputList
       case _ =>
         val (newOutput, newInput) = inputList.span(_ == inputList.head)
-        pack(newInput, outputList ++ List(newOutput))
+        pack(newInput, outputList :+ newOutput)
     }
   }
 
@@ -100,7 +100,7 @@ object WorkingWithLists {
       case _ =>
         val (sublist, newInput): (List[A], List[A]) = inputList.span(_ == inputList.head)
         val newOutput: (Int, A) = if (sublist.length == 1) (1, sublist.head) else (sublist.length, sublist.head)
-        encodeDirect(newInput, outputList ++ List(newOutput))
+        encodeDirect(newInput, outputList :+ newOutput)
     }
   }
 
@@ -108,7 +108,7 @@ object WorkingWithLists {
   @tailrec
   def duplicate[A](input: List[A], output: List[A] = List.empty): List[A] = {
     if (input.isEmpty) output
-    else duplicate(input.tail, output ++ List(input.head, input.head))
+    else duplicate(input.tail, output :+ input.head :+ input.head)
   }
 
   //p15 duplicate list elements a given number of times
@@ -138,7 +138,7 @@ object WorkingWithLists {
         case Nil => outputOfLastCall
         case _ =>
           if (indexIsMultipleOfN) dropRec(n, input.tail, outputOfLastCall, acc + 1)
-          else dropRec(n, input.tail, outputOfLastCall ++ List(input.head), acc + 1)
+          else dropRec(n, input.tail, outputOfLastCall :+ input.head, acc + 1)
       }
     }
     dropRec(n, list)
@@ -149,7 +149,7 @@ object WorkingWithLists {
   def split[A](originalList: List[A], index: Int, acc: Int = 0, newList: List[A] = List.empty): (List[A], List[A]) = {
     val reachedFinalIndex: Boolean = acc == index
     if (reachedFinalIndex) (newList, originalList)
-    else split(originalList.tail, index, acc = acc + 1, newList = newList ++ List(originalList.head))
+    else split(originalList.tail, index, acc = acc + 1, newList = newList :+ originalList.head)
   }
 
   //p18 extract a slice from a list
