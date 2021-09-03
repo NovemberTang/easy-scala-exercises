@@ -25,4 +25,8 @@ class ArithmeticSpec extends AnyFlatSpec with Matchers {
     8.isCoprimeTo(64) shouldBe false
   }
 
+  "all prime factors" should "be returned" in {
+    315.primeFactors shouldBe List(3, 3, 5, 7)
+  }
+
 }

@@ -116,6 +116,7 @@ object WorkingWithLists {
     throwIfListTooShort(1, list)
 
     def createDuplicatesOfElement(elem: A, n: Int = n, input: List[A] = List.empty): List[A] = {
+      //replicating List.fill(n)(elem)
       n match {
         case 0 => input
         case _ => elem :: createDuplicatesOfElement(elem, n - 1, input)

@@ -43,10 +43,26 @@ object Arithmetic {
     else hi #:: createDescLazyList(hi - 1, lo)
   }
 
-  //p33 determine whether two positive integers are coprime
   class Integer(value: Int){
+    //p33 determine whether two positive integers are coprime
     def isCoprimeTo(int: Int): Boolean = gcd(value,int) == 1
+
+    //p34 Calculate Euler's totient
+    def totient: Int = 1.to(value).count(_.isCoprimeTo(value))
+
+    //35 Find the prime factors of a number
+    def primeFactors: List[Int] = {
+      @tailrec
+      def findPrimeFactors(value: Int, factors: List[Int] = List.empty): List[Int] = {
+        val largestPrime = (value/2).to(2).by(-1).find(x => isPrime(x) && value%x == 0).getOrElse(value)
+        if (value/largestPrime==1) largestPrime :: factors
+        else findPrimeFactors(value/largestPrime, largestPrime :: factors)
+      }
+      findPrimeFactors(value)
+    }
+
   }
+
 
 }
 
