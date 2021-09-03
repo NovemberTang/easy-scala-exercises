@@ -8,7 +8,7 @@ object Arithmetic {
   implicit def intToInteger(int: Int): Integer = new Integer(int)
 
   //p31 determine whether an integer is prime
-  def isPrime(int: Int): Boolean = {
+  def isPrime(value: Int): Boolean = {
 
     @tailrec
     def primeRecurse(int: Int, factors: LazyList[Int]): Boolean = {
@@ -20,8 +20,8 @@ object Arithmetic {
       }
     }
 
-    val possibleFactors = createDescLazyList(Math.sqrt(int).toInt, 0)
-    if(int == 1) false else primeRecurse(int, possibleFactors)
+    val possibleFactors = createDescLazyList(Math.sqrt(value).toInt, 0)
+    if(value == 1) false else primeRecurse(value, possibleFactors)
   }
 
   //p32 find greatest common divisor of two positive integers
@@ -38,19 +38,30 @@ object Arithmetic {
     if (a == 1 || b == 1) 1 else findGcd(possibleAnswers, a, b)
   }
 
+  //p39 List all primes in a given range
+  def listPrimesinRange(range: Range): List[Int] = range.filter(isPrime).toList
+
+  //p41 goldbach compositions
+  private def findGoldbackPairs(range: Range) = range.withFilter(_.isEven).map(_.goldbach).toList
+  def createGoldbackStrings(range: Range): List[String] = findGoldbackPairs(range).map{case (p1, p2) => s"${p1 + p2} = $p1 + $p2"}
+  def printGoldbachList(range: Range): Unit = createGoldbackStrings(range).foreach(println)
+
   private def createDescLazyList(hi: Int, lo: Int): LazyList[Int] = {
     if (lo >= hi) LazyList.empty
     else hi #:: createDescLazyList(hi - 1, lo)
   }
 
   class Integer(value: Int){
+
+    def isEven = value%2 == 0
+
     //p33 determine whether two positive integers are coprime
     def isCoprimeTo(int: Int): Boolean = gcd(value,int) == 1
 
     //p34 Calculate Euler's totient
     def totient: Int = 1.to(value).count(_.isCoprimeTo(value))
 
-    //35 Find the prime factors of a number
+    //p35 Find the prime factors of a number
     def primeFactors: List[Int] = {
       @tailrec
       def findPrimeFactors(value: Int, factors: List[Int] = List.empty): List[Int] = {
@@ -61,8 +72,24 @@ object Arithmetic {
       findPrimeFactors(value)
     }
 
-  }
+    //p36 find prime factors along with their multiplicity
+    def primeFactorMultiplicity: List[(Int, Int)] = {
+      val primeFactorList = value.primeFactors
+      val distinctFactors = primeFactorList.distinct
 
+      distinctFactors.zip(
+        distinctFactors.map(
+          x => primeFactorList.count(_ == x)
+        )
+      )
+    }
+
+    //p40
+    def goldbach: (Int, Int) = {
+      val possibleFirstNumbers = listPrimesinRange(2 to value/2)
+      possibleFirstNumbers.zip(possibleFirstNumbers.map(value - _)).find(x =>isPrime(x._2)).get
+    }
+  }
 
 }
 
